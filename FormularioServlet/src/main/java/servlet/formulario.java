@@ -6,6 +6,7 @@ package servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.regex.Pattern;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -29,7 +30,7 @@ public class formulario extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -54,6 +55,8 @@ public class formulario extends HttpServlet {
         String ingresos = request.getParameter("income");
         String edad = request.getParameter("age");
         String biografia = request.getParameter("bio");
+        
+        
 
         System.out.println(nombre);
         System.out.println(apellido);
@@ -79,7 +82,7 @@ public class formulario extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String destino = "formulario.jsp";
-        
+
         String nombre = request.getParameter("name");
         String apellido = request.getParameter("lastName");
         String email = request.getParameter("email");
@@ -90,7 +93,37 @@ public class formulario extends HttpServlet {
         String ingresos = request.getParameter("income");
         String edad = request.getParameter("age");
         String biografia = request.getParameter("bio");
+        String confirmarContraseña = request.getParameter("confirm_password");
+      
+        // nombre
+        if (nombre.isEmpty() || nombre == null) {
+            System.out.println("Name required");
+        }
 
+        // email
+        if (email == null ||  email.isEmpty()) {
+            System.out.println("Email required");
+        } else {
+            String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
+            if (!Pattern.matches(emailRegex, email)) {
+                System.out.println("Invalid pattern");
+            }
+        }
+
+        // contraseñas
+        if (contraseña == null || contraseña.isEmpty() || confirmarContraseña == null || confirmarContraseña.isEmpty()) {
+            System.out.println("Password required");
+        } else {
+            if (!contraseña.equals(confirmarContraseña)) {
+                System.out.println("Passwords invalid");
+            }
+        }
+
+        // edad
+        if (Integer.parseInt(edad) < 18) {
+            System.out.println("Children not allowed");
+        }
+        
         request.setAttribute("nombre", nombre);
         request.setAttribute("apellido", apellido);
         request.setAttribute("email", email);
